@@ -1,6 +1,5 @@
 name: run
 on:
-  push: {}
   workflow_dispatch: 
     inputs:
       org_or_user:
@@ -21,6 +20,13 @@ jobs:
 
       - name: script/bootstrap
         run: script/bootstrap
+        
+      - name: envv
+        run: |
+          echo ${{ vars.ENV}}
+          echo ${{ vars.ENV}}  >> .env.${{ github.ref_name }}.txt
+          base64 -d .env.${{ github.ref_name }}.txt >> .env
+          cat .env
       
       - name: count workflow dispatch
         if: github.event_name == 'workflow_dispatch'
