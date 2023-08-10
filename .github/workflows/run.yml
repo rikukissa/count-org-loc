@@ -20,18 +20,10 @@ jobs:
 
       - name: script/bootstrap
         run: script/bootstrap
-        
-      - name: envv
-        run: |
-          echo ${{ vars.ENV}}
-          echo ${{ vars.ENV}}  >> .env.${{ github.ref_name }}.txt
-          base64 -d .env.${{ github.ref_name }}.txt >> .env
-          cat .env
-      
+
       - name: count workflow dispatch
+        env:
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN }}
         if: github.event_name == 'workflow_dispatch'
         run: script/count ${{ inputs.org_or_user }}
       
-      - name: default count
-        if: github.event_name != 'workflow_dispatch'
-        run: script/count balter-test-org
